@@ -5,8 +5,7 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import Root from "./components/Root";
 import Todos from "./components/Todos";
-import NewTodo from "./components/NewTodo";
-import EditTodo from "./components/EditTodo";
+import NewAndEditTodo from "./components/NewAndEditTodo";
 
 const router = createBrowserRouter([
   {
@@ -23,11 +22,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/new",
-        element: <NewTodo />,
+        element: <NewAndEditTodo />,
       },
       {
         path: "/edit/:todoId",
-        element: <EditTodo />,
+        element: <NewAndEditTodo />,
       },
     ],
   },

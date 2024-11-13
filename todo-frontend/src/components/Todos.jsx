@@ -136,10 +136,8 @@ function Todos() {
       fetch("http://localhost:8000/todo")
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           setTodos(data);
         });
-      console.log(todos);
     }
     //fetches and converts data for the priority list page
     else {
