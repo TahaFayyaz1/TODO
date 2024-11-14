@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "./context/AuthContext.jsx";
 
 function NavBar({ darkMode, toggleDarkMode }) {
+  let { user, loginUser } = useContext(AuthContext);
+
   return (
     <nav className="bg-gray-100 shadow-md dark:bg-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -67,6 +70,13 @@ function NavBar({ darkMode, toggleDarkMode }) {
                 </svg>
               )}
             </button>
+            <div>
+              {user ? (
+                <Link to="/logout">Logout</Link>
+              ) : (
+                <Link to="/login">Login</Link>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -6,6 +6,10 @@ import reportWebVitals from "./reportWebVitals";
 import Root from "./components/Root";
 import Todos from "./components/Todos";
 import NewAndEditTodo from "./components/NewAndEditTodo";
+import Login from "./components/Login";
+import PrivateRoute from "./components/PrivateRoute";
+import { AuthProvider } from "./components/context/AuthContext.jsx";
+import Logout from "./components/Logout";
 
 const router = createBrowserRouter([
   {
@@ -14,19 +18,43 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Todos />,
+        element: (
+          <PrivateRoute>
+            <Todos />,
+          </PrivateRoute>
+        ),
       },
       {
         path: "/priorities",
-        element: <Todos />,
+        element: (
+          <PrivateRoute>
+            <Todos />,
+          </PrivateRoute>
+        ),
       },
       {
         path: "/new",
-        element: <NewAndEditTodo />,
+        element: (
+          <PrivateRoute>
+            <NewAndEditTodo />,
+          </PrivateRoute>
+        ),
       },
       {
         path: "/edit/:todoId",
-        element: <NewAndEditTodo />,
+        element: (
+          <PrivateRoute>
+            <NewAndEditTodo />,
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/logout",
+        element: <Logout />,
       },
     ],
   },
@@ -35,7 +63,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>,
 );
 

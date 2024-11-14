@@ -1,10 +1,16 @@
 from .models import Todo, Priority
-from .serializers import TodoSerializer, PrioritySerializer
+from .serializers import TodoSerializer, PrioritySerializer, MyTokenObtainPairSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 # Create your views here.
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 
 @api_view(["GET", "POST"])
