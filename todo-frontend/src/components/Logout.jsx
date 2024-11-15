@@ -12,8 +12,6 @@ function Logout() {
     setUser(null);
     navigate("/");
   }, [navigate, setUser, setAuthTokens]);
-
-  return <div>Logout</div>;
 }
 
 export default Logout;

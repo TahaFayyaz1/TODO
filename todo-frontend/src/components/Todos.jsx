@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import AuthContext from "./context/AuthContext";
 
 function Todo({ todo, onDelete }) {
   const [priority, setPriority] = useState(false);
@@ -10,6 +11,7 @@ function Todo({ todo, onDelete }) {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [isDeleting, setIsDeleting] = useState(false); //deals with the delete animation
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const [date, time] = todo.datetime.split("T");
@@ -20,23 +22,29 @@ function Todo({ todo, onDelete }) {
   const DeleteButton = () => {
     setIsDeleting(true); // Trigger the deletion animation
     setTimeout(() => {
-      fetch(`http://localhost:8000/todo/${todo.id}`, { method: "DELETE" }).then(
-        (response) => {
-          if (response.ok) {
-            onDelete(todo.id);
-          }
-        },
-      );
+      fetch(`http://localhost:8000/todo/${todo.id}?username=${user.username}`, {
+        method: "DELETE",
+      }).then((response) => {
+        if (response.ok) {
+          onDelete(todo.id);
+        }
+      });
     }, 200); // Wait for the animation to complete before deleting
   };
 
   const PriorityButton = () => {
     if (priority === false) {
-      fetch(`http://localhost:8000/priority/${todo.id}`, { method: "POST" });
+      fetch(
+        `http://localhost:8000/priority/${todo.id}?username=${user.username}`,
+        { method: "POST" },
+      );
       setPriority(!priority);
       setLabel("Remove from Priority");
     } else {
-      fetch(`http://localhost:8000/priority/${todo.id}`, { method: "DELETE" });
+      fetch(
+        `http://localhost:8000/priority/${todo.id}?username=${user.username}`,
+        { method: "DELETE" },
+      );
       setPriority(!priority);
       setLabel("Add to Priority");
     }
@@ -54,7 +62,10 @@ function Todo({ todo, onDelete }) {
 
   const completeButton = (event) => {
     event.preventDefault();
-    fetch(`http://localhost:8000/todo/${todo.id}`, requestOptions).then(() => {
+    fetch(
+      `http://localhost:8000/todo/${todo.id}?username=${user.username}`,
+      requestOptions,
+    ).then(() => {
       setCompleted(!completed);
     });
   };
@@ -130,10 +141,11 @@ function Todo({ todo, onDelete }) {
 function Todos() {
   const [todos, setTodos] = useState([]);
   const location = useLocation();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     if (location.pathname === "/") {
-      fetch("http://localhost:8000/todo")
+      fetch(`http://localhost:8000/todo?username=${user.username}`)
         .then((response) => response.json())
         .then((data) => {
           setTodos(data);
@@ -141,13 +153,13 @@ function Todos() {
     }
     //fetches and converts data for the priority list page
     else {
-      fetch(`http://localhost:8000/priority`)
+      fetch(`http://localhost:8000/priority?username=${user.username}`)
         .then((response) => response.json())
         .then((data) => {
           setTodos(data.map((item) => item.title));
         });
     }
-  }, [location, todos]);
+  }, [location, user]);
 
   //updates the Todos so that onDelete the list is rerendered
   const handleDelete = (id) => {

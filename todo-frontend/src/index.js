@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./components/context/AuthContext.jsx";
 import Logout from "./components/Logout";
+import Register from "./components/Register.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
         path: "/",
         element: (
           <PrivateRoute>
-            <Todos />,
+            <Todos />
           </PrivateRoute>
         ),
       },
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
         path: "/priorities",
         element: (
           <PrivateRoute>
-            <Todos />,
+            <Todos />
           </PrivateRoute>
         ),
       },
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
         path: "/new",
         element: (
           <PrivateRoute>
-            <NewAndEditTodo />,
+            <NewAndEditTodo />
           </PrivateRoute>
         ),
       },
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
         path: "/edit/:todoId",
         element: (
           <PrivateRoute>
-            <NewAndEditTodo />,
+            <NewAndEditTodo />
           </PrivateRoute>
         ),
       },
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "/logout",
         element: <Logout />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
     ],
   },

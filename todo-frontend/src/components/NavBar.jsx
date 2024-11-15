@@ -1,9 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "./context/AuthContext.jsx";
 
 function NavBar({ darkMode, toggleDarkMode }) {
-  let { user, loginUser } = useContext(AuthContext);
+  let { user } = useContext(AuthContext);
 
   return (
     <nav className="bg-gray-100 shadow-md dark:bg-gray-800">
@@ -36,6 +36,31 @@ function NavBar({ darkMode, toggleDarkMode }) {
             >
               New Todo
             </Link>
+            <div>
+              {user ? (
+                <Link
+                  to="/logout"
+                  className="mx-3 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                >
+                  Logout
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="mx-3 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="mx-3 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
+            </div>
             <button
               onClick={toggleDarkMode}
               className="ml-4 rounded-full bg-gray-200 p-2 text-gray-600 transition-colors duration-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -70,13 +95,6 @@ function NavBar({ darkMode, toggleDarkMode }) {
                 </svg>
               )}
             </button>
-            <div>
-              {user ? (
-                <Link to="/logout">Logout</Link>
-              ) : (
-                <Link to="/login">Login</Link>
-              )}
-            </div>
           </div>
         </div>
       </div>

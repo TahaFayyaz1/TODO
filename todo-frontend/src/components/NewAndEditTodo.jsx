@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import AuthContext from "./context/AuthContext";
 
 function NewAndEditTodo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
   const { todoId } = useParams();
+  const { user } = useContext(AuthContext);
 
   const requestOptions = {
     method: todoId ? "PUT" : "POST",
@@ -17,13 +19,19 @@ function NewAndEditTodo() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (todoId) {
-      fetch(`http://localhost:8000/todo/${todoId}`, requestOptions).then(() => {
+      fetch(
+        `http://localhost:8000/todo/${todoId}?username=${user.username}`,
+        requestOptions,
+      ).then(() => {
         setTitle("");
         setDescription("");
         navigate("/");
       });
     } else {
-      fetch("http://localhost:8000/todo", requestOptions).then(() => {
+      fetch(
+        `http://localhost:8000/todo?username=${user.username}`,
+        requestOptions,
+      ).then(() => {
         setTitle("");
         setDescription("");
         navigate("/");
@@ -33,14 +41,14 @@ function NewAndEditTodo() {
 
   useEffect(() => {
     if (todoId) {
-      fetch(`http://localhost:8000/todo/${todoId}`)
+      fetch(`http://localhost:8000/todo/${todoId}?username=${user.username}`)
         .then((response) => response.json())
         .then((data) => {
           setTitle(data.title);
           setDescription(data.description);
         });
     }
-  }, [todoId]);
+  }, [todoId, user]);
 
   return (
     <div className="mx-auto mt-10 max-w-md rounded-lg bg-white p-8 shadow-md dark:bg-gray-800">
