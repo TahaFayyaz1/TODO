@@ -33,7 +33,7 @@ class RegisterSerializer(serializers.Serializer):
             )
             return user
         except IntegrityError:
-            raise serializers.ValidationError("Username already taken.")
+            raise serializers.ValidationError({"username": "Username already taken."})
 
 
 class UserSerializer(serializers.ModelSerializer):
