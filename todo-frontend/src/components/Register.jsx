@@ -34,7 +34,7 @@ function Register() {
           setSuccess("Registration successful! Redirecting to login page...");
           setTimeout(() => {
             navigate("/");
-          }, 3000);
+          }, 1500);
         } else if (status === 400) {
           // Check for specific errors from the backend
           if (data.username) {
@@ -118,6 +118,7 @@ function Register() {
             <div>
               <input
                 type="text"
+                autoComplete="off"
                 autoFocus
                 required
                 className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 sm:text-sm"
@@ -128,6 +129,7 @@ function Register() {
             <div>
               <input
                 type="email"
+                autoComplete="off"
                 required
                 className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 sm:text-sm"
                 placeholder="Email address"

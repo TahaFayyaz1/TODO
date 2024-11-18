@@ -9,7 +9,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.views import APIView
 
 
 # Create your views here.
@@ -23,7 +22,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 def register(request):
     serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
-        user = serializer.save()
+        serializer.save()
         return Response(
             {"message": "User registered successfully."},
             status=status.HTTP_201_CREATED,
@@ -79,7 +78,7 @@ def todo_id(request, todo_id):
 def priorities(request):
     username = request.GET.get("username")
     user = User.objects.get(username=username)
-    priorities = Priority.objects.filter(user=user)  # TODO
+    priorities = Priority.objects.filter(title__user=user)
     return Response(
         PrioritySerializer(priorities, many=True).data, status=status.HTTP_200_OK
     )
@@ -101,11 +100,19 @@ def priority(request, todo_id):
         priority = Priority.objects.get(title=todo)
 
         if request.method == "GET":
-            return Response(PrioritySerializer(priority).data)
+            return Response(
+                PrioritySerializer(priority).data, status=status.HTTP_200_OK
+            )
 
         elif request.method == "DELETE":
             priority.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # removes multiple instances of Priority if created by repeated post request
+    except Priority.MultipleObjectsReturned:
+        duplicates = Priority.objects.filter(title=todo)
+        duplicates.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     except Priority.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)

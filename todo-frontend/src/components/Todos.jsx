@@ -3,11 +3,9 @@ import { Link, useLocation } from "react-router-dom";
 import AuthContext from "./context/AuthContext";
 
 function Todo({ todo, onDelete }) {
-  const [priority, setPriority] = useState(false);
+  const [priority, setPriority] = useState(null);
   const [completed, setCompleted] = useState(todo.completed);
-  const [label, setLabel] = useState(
-    `${!priority ? "Add to Priority" : "Remove from Priority"}`,
-  );
+  const [label, setLabel] = useState(null);
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [isDeleting, setIsDeleting] = useState(false); //deals with the delete animation
@@ -17,7 +15,19 @@ function Todo({ todo, onDelete }) {
     const [date, time] = todo.datetime.split("T");
     setDate(date);
     setTime(time.substr(0, 5));
-  }, [todo]);
+
+    fetch(
+      `http://localhost:8000/priority/${todo.id}?username=${user.username}`,
+    ).then((response) => {
+      if (response.status === 200) {
+        setPriority(true);
+        setLabel("Remove from Priority");
+      } else if (response.status === 400) {
+        setPriority(false);
+        setLabel("Add to Priority");
+      }
+    });
+  }, [todo, user]);
 
   const DeleteButton = () => {
     setIsDeleting(true); // Trigger the deletion animation

@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 const Login = () => {
   let { setAuthTokens, setUser } = useContext(AuthContext);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +32,10 @@ const Login = () => {
       localStorage.setItem("authTokens", JSON.stringify(data));
       setAuthTokens(data);
       setUser(jwtDecode(data.access));
-      navigate("/");
+      setSuccess("Login successful!");
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } else if (
       data.detail === "No active account found with the given credentials"
     ) {
@@ -72,6 +76,31 @@ const Login = () => {
             </div>
           </div>
         )}
+        {success && (
+          <div className="rounded-md bg-green-50 p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-5 w-5 text-green-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-green-800">
+                  {success}
+                </h3>
+              </div>
+            </div>
+          </div>
+        )}
         <form className="mt-8 space-y-6" onSubmit={loginUser}>
           <div className="-space-y-px rounded-md shadow-sm">
             <div>
@@ -79,6 +108,7 @@ const Login = () => {
                 type="text"
                 name="username"
                 autoFocus
+                autoComplete="off"
                 required
                 className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 sm:text-sm"
                 placeholder="Username"
